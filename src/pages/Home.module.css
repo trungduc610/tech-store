@@ -1,0 +1,75 @@
+/* src/pages/Home.module.css */
+.homeContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 40px; /* Khoảng cách giữa các section */
+}
+
+/* Style cho Banner */
+.bannerWrapper {
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(90deg, #0f172a 0%, #1e293b 100%);
+  color: white;
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 350px;
+  position: relative;
+}
+
+.bannerContent {
+  max-width: 50%;
+  z-index: 2;
+}
+
+.bannerTag {
+  background: #02c39a;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 12px;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+.bannerTitle {
+  font-size: 36px;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+  line-height: 1.2;
+}
+
+.bannerDesc {
+  font-size: 16px;
+  margin-bottom: 24px;
+  color: #cbd5e1;
+}
+
+/* Custom Card Hover */
+.customCard {
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+}
+
+.customCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+}
+
+.categoryIcon {
+  font-size: 40px;
+  color: #0d3b66;
+  margin-bottom: 12px;
+}
+
+/* Policy Section */
+.policySection {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 40px;
+  margin-top: 20px;
+}
