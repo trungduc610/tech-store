@@ -6,6 +6,9 @@ import {
   FiShield, FiTruck, FiClock, FiRefreshCw 
 } from 'react-icons/fi';
 import styles from './Home.module.css';
+import bannerImg1 from '../assets/images/banner1.png';
+import bannerImg2 from '../assets/images/banner2.png';
+import bannerImg3 from '../assets/images/banner3.png';
 
 const { Title, Text } = Typography;
 
@@ -36,22 +39,69 @@ const Home = () => {
     <div className={styles.homeContainer}>
       
       {/* 1. HERO BANNER */}
-      <Carousel autoplay>
+      <Carousel autoplay effect="fade" autoplaySpeed={4000}>
+        
+        {/* ============ BANNER 1: LAPTOP ============ */}
         <div>
-          <div className={styles.bannerWrapper}>
+          <div 
+            className={styles.bannerWrapper} 
+            style={{ backgroundImage: `url(${bannerImg1})` }}
+          >
+            <div className={styles.bannerOverlay}></div>
             <div className={styles.bannerContent}>
               <span className={styles.bannerTag}>KHUYẾN MÃI CỰC HOT</span>
               <h1 className={styles.bannerTitle}>Siêu phẩm Laptop<br/>AI mới - Giảm ngay<br/>5 triệu</h1>
               <p className={styles.bannerDesc}>Trải nghiệm sức mạnh trí tuệ nhân tạo, thiết kế đẳng cấp cho giới chuyên gia.</p>
-              <Button type="primary" size="large" style={{ background: '#fff', color: '#0d3b66', fontWeight: 'bold' }}>
+              <Button type="primary" size="large" style={{ background: '#ffffff', color: '#003049', fontWeight: 'bold', padding: '0 32px', height: '48px', fontSize: '16px' }}>
                 Mua Ngay
               </Button>
             </div>
-            {/* Ảnh placeholder cho Laptop trong banner */}
-            <img src="https://placehold.co/500x300/transparent/white?text=Laptop+AI+Image" alt="Banner" style={{ zIndex: 1 }} />
           </div>
         </div>
-        {/* Bạn có thể copy khối <div> bọc .bannerWrapper ở trên thêm 1-2 lần để làm slide thứ 2, thứ 3 */}
+
+        {/* ============ BANNER 2: SMARTPHONE ============ */}
+        <div>
+          <div 
+            className={styles.bannerWrapper} 
+            style={{ backgroundImage: `url(${bannerImg2})` }}
+          >
+            <div className={styles.bannerOverlay}></div>
+            <div className={styles.bannerContent}>
+              {/* Tag màu xanh mint */}
+              <span className={styles.bannerTag}>ĐẶT TRƯỚC NGAY</span>
+              {/* Tiêu đề */}
+              <h1 className={styles.bannerTitle}>Siêu Phẩm Smartphone Mới<br/>Nhận Quà 3 Triệu</h1>
+              {/* Mô tả */}
+              <p className={styles.bannerDesc}>Camera đỉnh cao, hiệu năng bứt phá mọi giới hạn công nghệ.</p>
+              {/* Nút bấm */}
+              <Button type="primary" size="large" style={{ background: '#ffffff', color: '#003049', fontWeight: 'bold', padding: '0 32px', height: '48px', fontSize: '16px' }}>
+                Xem Chi Tiết
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div 
+            className={styles.bannerWrapper} 
+            style={{ backgroundImage: `url(${bannerImg3})` }}
+          >
+            <div className={styles.bannerOverlay}></div>
+            <div className={styles.bannerContent}>
+              {/* Tag màu xanh mint */}
+              <span className={styles.bannerTag}>PHỤ KIỆN CHÍNH HÃNG</span>
+              {/* Tiêu đề */}
+              <h1 className={styles.bannerTitle}>Hệ Sinh Thái Gaming<br/> Giảm Đến 40%</h1>
+              {/* Mô tả */}
+              <p className={styles.bannerDesc}>Đẩy cao trải nghiệm, làm chủ mọi trận chiến âm thanh và tốc độ.</p>
+              {/* Nút bấm */}
+              <Button type="primary" size="large" style={{ background: '#ffffff', color: '#003049', fontWeight: 'bold', padding: '0 32px', height: '48px', fontSize: '16px' }}>
+                Xem Danh Sách
+              </Button>
+            </div>
+          </div>
+        </div>
+
       </Carousel>
 
       {/* 2. DANH MỤC NỔI BẬT */}

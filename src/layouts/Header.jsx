@@ -1,55 +1,73 @@
 import React from 'react';
-import { Layout, Menu } from 'antd';
+import { Input, Badge, Menu } from 'antd';
 import { Link } from 'react-router-dom';
-import { ShoppingCartOutlined, HeartOutlined, UserOutlined } from '@ant-design/icons';
-
-// 1. Import file logo từ thư mục assets
-import logoImg from '../assets/images/techstore_logo.png'; 
-
-const { Header: AntHeader } = Layout;
+import { SearchOutlined, HeartOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
+import logoImg from '../assets/images/techstore_logo.png';
+import styles from './Header.module.css';
 
 const Header = () => {
+  // Đưa các danh mục con vào menu luôn để giống với một web bán hàng thực tế
   const menuItems = [
-    {
-      key: 'home',
-      label: <Link to="/">Trang chủ</Link>,
-    },
-    {
-      key: 'products',
-      label: <Link to="/products">Sản phẩm</Link>,
-    },
+    { key: 'home', label: <Link to="/">Trang chủ</Link> },
+    { key: 'laptop', label: <Link to="/products?category=laptop">Laptop</Link> },
+    { key: 'phone', label: <Link to="/products?category=phone">Điện thoại</Link> },
+    { key: 'accessories', label: <Link to="/products?category=accessories">Phụ kiện</Link> },
+    { key: 'components', label: <Link to="/products?category=components">Linh kiện</Link> },
   ];
 
   return (
-    <AntHeader style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#0d3b66', padding: '0 50px' }}>
+    <header className={styles.headerWrapper}>
       
-      {/* 2. Cập nhật phần Logo: Dùng display flex và gap để tạo khoảng cách */}
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', gap: '12px' }}>
-          <img 
-            src={logoImg} 
-            alt="TechZone Logo" 
-            style={{ height: '36px', width: 'auto', objectFit: 'contain', background: '#fff', borderRadius: '4px', padding: '2px' }} 
-          />
-          <span style={{ color: '#02c39a', fontSize: '24px', fontWeight: 'bold' }}>TechZone</span>
+      {/* 1. HÀNG TRÊN (TOP ROW) */}
+      <div className={styles.topRow}>
+        
+        {/* Logo */}
+        <Link to="/" className={styles.logoSection}>
+          <img src={logoImg} alt="TechZone Logo" className={styles.logoImg} />
+          <span className={styles.logoText}>TechZone</span>
         </Link>
+
+        {/* Thanh tìm kiếm trung tâm */}
+        <div className={styles.searchSection}>
+          <Input
+            size="large"
+            placeholder="Bạn đang tìm kiếm gì?"
+            prefix={<SearchOutlined style={{ color: '#9ca3af', marginRight: '8px' }} />}
+            style={{ borderRadius: '6px' }}
+          />
+        </div>
+
+        {/* Các biểu tượng chức năng */}
+        <div className={styles.iconSection}>
+          <Link to="/wishlist" className={styles.iconLink}>
+            <HeartOutlined />
+          </Link>
+          
+          <Link to="/cart" className={styles.iconLink}>
+            {/* Sử dụng Badge để tạo chấm đỏ thông báo số lượng */}
+            <Badge count={3} color="#ef4444" size="small" offset={[-2, 4]}>
+              <ShoppingCartOutlined style={{ fontSize: '24px', color: '#003049' }} />
+            </Badge>
+          </Link>
+
+          {/* Giữ lại icon Profile để người dùng có thể đăng nhập */}
+          <Link to="/profile" className={styles.iconLink}>
+            <UserOutlined />
+          </Link>
+        </div>
       </div>
 
-      {/* Điều hướng */}
-      <Menu 
-        theme="dark" 
-        mode="horizontal" 
-        items={menuItems} 
-        style={{ background: 'transparent', flex: 1, justifyContent: 'center', borderBottom: 'none' }} 
-      />
-
-      {/* Icons */}
-      <div style={{ display: 'flex', gap: '20px', fontSize: '20px' }}>
-        <Link to="/wishlist" style={{ color: '#fff' }}><HeartOutlined /></Link>
-        <Link to="/cart" style={{ color: '#fff' }}><ShoppingCartOutlined /></Link>
-        <Link to="/profile" style={{ color: '#fff' }}><UserOutlined /></Link>
+      {/* 2. HÀNG DƯỚI (BOTTOM ROW) - MENU ĐIỀU HƯỚNG */}
+      <div className={styles.bottomRow}>
+        <Menu 
+          mode="horizontal" 
+          items={menuItems} 
+          className={styles.navMenu}
+          selectedKeys={[]} // Tạm thời để trống, sau này có thể cấu hình active theo route
+        />
       </div>
-    </AntHeader>
+
+    </header>
   );
 };
 

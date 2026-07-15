@@ -9,43 +9,61 @@
 .bannerWrapper {
   border-radius: 12px;
   overflow: hidden;
-  background: linear-gradient(90deg, #0f172a 0%, #1e293b 100%);
+  /* Chúng ta sẽ truyền đường dẫn ảnh nền thông qua inline style trong React để dễ quản lý biến import */
+  background-color: #0d2136; /* Màu nền dự phòng */
+  background-size: cover;
+  background-position: center right; /* Căn ảnh sang phải để laptop không bị chữ che khuất */
+  background-repeat: no-repeat;
   color: white;
-  padding: 40px;
+  padding: 60px 50px; /* Tăng padding để banner nhìn to và thoáng hơn */
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  min-height: 350px;
+  height: 420px; /* Đặt chiều cao tối thiểu cho banner */
   position: relative;
 }
 
+/* Thêm một lớp phủ mờ (overlay) bên trái để chữ nổi bật hơn trên nền ảnh */
+.bannerOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60%; /* Độ rộng lớp phủ mờ chiếm 60% từ trái sang */
+  height: 100%;
+  background: linear-gradient(to right, rgba(13, 33, 54, 0.95) 0%, rgba(13, 33, 54, 0.7) 60%, transparent 100%);
+  z-index: 1;
+}
+
+/* Cập nhật lại phần chứa nội dung chữ */
 .bannerContent {
   max-width: 50%;
-  z-index: 2;
+  z-index: 2; /* Đảm bảo chữ nằm trên lớp overlay */
+  position: relative;
 }
 
 .bannerTag {
   background: #02c39a;
   color: #fff;
-  padding: 4px 12px;
+  padding: 6px 16px;
   border-radius: 20px;
   font-weight: bold;
-  font-size: 12px;
+  font-size: 14px;
   display: inline-block;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 
 .bannerTitle {
-  font-size: 36px;
-  font-weight: 700;
-  margin: 0 0 16px 0;
-  line-height: 1.2;
+  font-size: 42px; /* Tăng kích thước chữ tiêu đề */
+  font-weight: 800;
+  margin: 0 0 20px 0;
+  line-height: 1.3;
+  color: #ffffff;
 }
 
 .bannerDesc {
-  font-size: 16px;
-  margin-bottom: 24px;
-  color: #cbd5e1;
+  font-size: 18px; /* Tăng kích thước chữ mô tả */
+  margin-bottom: 32px;
+  color: #e2e8f0;
+  line-height: 1.5;
 }
 
 /* Custom Card Hover */
