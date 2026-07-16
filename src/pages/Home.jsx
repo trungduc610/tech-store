@@ -41,7 +41,7 @@ const Home = () => {
       {/* 1. HERO BANNER */}
       <Carousel autoplay effect="fade" autoplaySpeed={4000}>
         
-        {/* ============ BANNER 1: LAPTOP ============ */}
+        {/* ============ BANNER 1 ============ */}
         <div>
           <div 
             className={styles.bannerWrapper} 
@@ -59,7 +59,7 @@ const Home = () => {
           </div>
         </div>
 
-        {/* ============ BANNER 2: SMARTPHONE ============ */}
+        {/* ============ BANNER 2 ============ */}
         <div>
           <div 
             className={styles.bannerWrapper} 
