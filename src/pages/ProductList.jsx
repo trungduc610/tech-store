@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Checkbox, Slider, Button, Select, Pagination, Card, Tag, Typography, Rate, Space, Spin, Alert, Skeleton } from 'antd';
 import { FiFilter } from 'react-icons/fi';
 import { Link, useSearchParams } from 'react-router-dom';
-import productService from '../api/productService'; 
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAllProducts } from '../redux/product/productSlice';
 import styles from './ProductList.module.css';
 
 const { Title, Text } = Typography;
@@ -27,76 +28,47 @@ const ProductList = () => {
   const initialMaxPrice = searchParams.get('max') ? Number(searchParams.get('max')) : 100000000;
   const initialPage = searchParams.get('page') ? Number(searchParams.get('page')) : 1;
 
-  const [originalProducts, setOriginalProducts] = useState([]);
-  const [displayProducts, setDisplayProducts] = useState([]); // Chứa tất cả SP đã lọc
+  const dispatch = useDispatch();
+  const { items: originalProducts, status, error } = useSelector((state) => state.product);
   
+  const loading = status === 'loading';
+
+  const [displayProducts, setDisplayProducts] = useState([]); 
   const [selectedCategories, setSelectedCategories] = useState(initialCategories);
   const [priceRange, setPriceRange] = useState([initialMinPrice, initialMaxPrice]);
   const [sortOrder, setSortOrder] = useState(initialSort);
   const [currentPage, setCurrentPage] = useState(initialPage);
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
   const updateURLParams = (categories, sort, minPrice, maxPrice, page) => {
     const params = {};
-    
     if (categories.length > 0) params.category = categories.join(',');
     if (sort !== 'banchay') params.sort = sort;
     if (minPrice > 0) params.min = minPrice;
     if (maxPrice < 100000000) params.max = maxPrice;
     if (page > 1) params.page = page;
-
     setSearchParams(params);
   };
 
   useEffect(() => {
-    const fetchTechProducts = async () => {
-      try {
-        setLoading(true);
-        const [phoneRes, laptopRes, accessoryRes, tabletRes] = await Promise.all([
-          productService.getProductsByCategory('smartphones'),
-          productService.getProductsByCategory('laptops'),
-          productService.getProductsByCategory('mobile-accessories'),
-          productService.getProductsByCategory('tablets')
-        ]);
-        
-        const combinedProducts = [
-          ...(phoneRes.products || []), 
-          ...(laptopRes.products || []),
-          ...(accessoryRes.products || []),
-          ...(tabletRes.products || [])
-        ];
-        
-        setOriginalProducts(combinedProducts);
-        setError(null);
-      } catch (err) {
-        setError('Không thể tải danh sách sản phẩm. Vui lòng kiểm tra lại!');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTechProducts();
-  }, []); 
+    if (status === 'idle') {
+      dispatch(fetchAllProducts());
+    }
+  }, [status, dispatch]); 
 
   useEffect(() => {
     if (originalProducts.length === 0) return;
 
     let result = [...originalProducts];
 
-    // Lọc theo Category
     if (selectedCategories.length > 0) {
       result = result.filter(prod => selectedCategories.includes(prod.category));
     }
 
-    // Lọc theo Khoảng giá
     result = result.filter(prod => {
       const priceVND = Math.round(prod.price * 25000);
       return priceVND >= priceRange[0] && priceVND <= priceRange[1];
     });
 
-    // Sắp xếp
     if (sortOrder === 'giathap') {
       result.sort((a, b) => a.price - b.price);
     } else if (sortOrder === 'giacao') {
@@ -116,7 +88,7 @@ const ProductList = () => {
 
   const handleCategoryChange = (checkedValues) => {
     setSelectedCategories(checkedValues);
-    setCurrentPage(1); // Khi đổi bộ lọc luôn quay về trang 1
+    setCurrentPage(1);
     updateURLParams(checkedValues, sortOrder, priceRange[0], priceRange[1], 1);
   };
 
@@ -147,7 +119,6 @@ const ProductList = () => {
   return (
     <div className={styles.listContainer}>
       <Row gutter={24}>
-        
         <Col span={6}>
           <div className={styles.sidebar}>
             <div className={styles.filterHeader}>
@@ -166,7 +137,6 @@ const ProductList = () => {
 
             <div className={styles.filterSection}>
               <div className={styles.filterTitle}>Khoảng giá (Triệu VNĐ)</div>
-              {/* Đưa giá trị priceRange đang ở mức VNĐ về lại hệ số 0-100 (Triệu) để Slider hiểu */}
               <Slider 
                 range 
                 value={[priceRange[0] / 1000000, priceRange[1] / 1000000]} 
@@ -193,7 +163,6 @@ const ProductList = () => {
         </Col>
 
         <Col span={18}>
-          
           <div className={styles.topBar}>
             <div>
               Tìm thấy <strong style={{ color: '#0d3b66' }}>{loading ? '...' : displayProducts.length}</strong> sản phẩm
@@ -289,7 +258,6 @@ const ProductList = () => {
               </div>
             </>
           )}
-
         </Col>
       </Row>
     </div>

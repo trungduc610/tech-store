@@ -2,22 +2,64 @@ import React, { useState, useEffect } from 'react';
 import { Breadcrumb, Row, Col, Rate, Tag, Button, Tabs, Spin, Alert } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 import { FiCheckCircle, FiShoppingCart, FiShield, FiTruck } from 'react-icons/fi';
+import { HeartOutlined, HeartFilled } from '@ant-design/icons';
 import productService from '../api/productService';
 import styles from './ProductDetail.module.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart } from '../redux/cart/cartSlice';
+import { toggleWishlist } from '../redux/wishlist/wishlistSlice';
+import { toast } from 'react-toastify';
 
 const formatPrice = (price) => new Intl.NumberFormat('vi-VN').format(price) + ' đ';
 
 const ProductDetail = () => {
-  const { id } = useParams(); // Lấy ID sản phẩm từ URL
+  const { id } = useParams(); 
   
-  // Các state quản lý dữ liệu API
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  // Các state quản lý UI
   const [activeImage, setActiveImage] = useState('');
   const [quantity, setQuantity] = useState(1);
+
+  const dispatch = useDispatch();
+
+  const wishlistItems = useSelector(state => state.wishlist.items);
+  
+  const isWishlisted = product ? wishlistItems.some(item => item.id === product.id) : false;
+
+  const handleToggleWishlist = () => {
+    const wishlistItem = {
+      id: product.id,
+      name: product.title,
+      price: Math.round(product.price * 25000),
+      oldPrice: product.discountPercentage > 0 ? Math.round((Math.round(product.price * 25000)) / (1 - product.discountPercentage / 100)) : null,
+      rating: Math.round(product.rating),
+      reviews: product.reviews ? product.reviews.length : 0,
+      img: product.thumbnail,
+      tags: [] 
+    };
+
+    dispatch(toggleWishlist(wishlistItem));
+    
+    if (isWishlisted) {
+      toast.info('Đã bỏ khỏi danh sách yêu thích'); 
+    } else {
+      toast.success('Đã thêm vào danh sách yêu thích!'); 
+    }
+  };
+
+  const handleAddToCart = () => {
+    const cartItem = {
+      id: product.id,
+      name: product.title,
+      price: Math.round(product.price * 25000),
+      qty: quantity,
+      img: product.thumbnail,
+    };
+    dispatch(addToCart(cartItem));
+    toast.success('Đã thêm sản phẩm vào giỏ hàng!');
+  };
 
   useEffect(() => {
     const fetchProductDetail = async () => {
@@ -151,7 +193,6 @@ const ProductDetail = () => {
               <FiCheckCircle color="#02c39a" size={18} style={{ flexShrink: 0, marginTop: '2px' }} />
               <span>{product.description}</span>
             </div>
-            {/* Lấy thông tin tags từ API để làm mô tả ngắn thêm phong phú */}
             {product.tags && product.tags.map((tag, idx) => (
               <div key={idx} className={styles.descItem}>
                 <FiCheckCircle color="#02c39a" size={18} style={{ flexShrink: 0, marginTop: '2px' }} />
@@ -170,11 +211,23 @@ const ProductDetail = () => {
           </div>
 
           <div className={styles.actionBtns}>
-            <Button className={styles.addToCartBtn} icon={<FiShoppingCart />} disabled={product.stock === 0}>
+            <Button className={styles.addToCartBtn} icon={<FiShoppingCart />} disabled={product.stock === 0} onClick={handleAddToCart}>
               Thêm vào giỏ hàng
             </Button>
             <Button type="primary" className={styles.buyNowBtn} disabled={product.stock === 0}>
               Mua ngay
+            </Button>
+            <Button 
+              size="large"
+              icon={isWishlisted ? <HeartFilled style={{ color: '#ef4444' }} /> : <HeartOutlined />} 
+              onClick={handleToggleWishlist}
+              style={{ 
+                height: '48px', 
+                color: isWishlisted ? '#ef4444' : '#374151',
+                borderColor: isWishlisted ? '#ef4444' : '#d1d5db'
+              }}
+            >
+              {isWishlisted ? 'Đã yêu thích' : 'Yêu thích'}
             </Button>
           </div>
 

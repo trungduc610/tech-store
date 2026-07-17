@@ -17,7 +17,6 @@ import NotFound from '../pages/NotFound';
 const AppRoutes = () => {
   return (
     <Routes>
-      {/* Các Route nằm trong BaseLayout sẽ có Header và Footer */}
       <Route path="/" element={<BaseLayout />}>
         <Route index element={<Home />} />
         <Route path="products" element={<ProductList />} />
@@ -27,7 +26,6 @@ const AppRoutes = () => {
         <Route path="profile" element={<Profile />} />
       </Route>
 
-      {/* Các Route đứng độc lập (Không có Header/Footer) */}
       <Route path="/login" element={<Login />} />
       <Route path="*" element={<NotFound />} />
     </Routes>

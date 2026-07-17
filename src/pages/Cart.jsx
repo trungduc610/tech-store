@@ -1,51 +1,47 @@
-import React, { useState } from 'react';
-import { Row, Col, Input, Button, Divider, Typography } from 'antd';
+import React from 'react';
+import { Row, Col, Input, Button, Divider, Typography, Empty } from 'antd';
 import { Link } from 'react-router-dom';
 import { FiTrash2, FiArrowLeft, FiArrowRight } from 'react-icons/fi';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateQuantity, removeFromCart } from '../redux/cart/cartSlice';
 import styles from './Cart.module.css';
+import { toast } from 'react-toastify';
 
 const { Title } = Typography;
-
-// --- MOCK DATA ---
-const initialCart = [
-  {
-    id: 1,
-    name: 'Laptop Asus ROG Strix G16',
-    price: 34490000,
-    qty: 1,
-    img: 'https://placehold.co/150x150/f8f9fa/a0aec0?text=Asus+ROG',
-    status: 'Sẵn hàng',
-  },
-  {
-    id: 2,
-    name: 'iPhone 15 Pro Max',
-    price: 29990000,
-    qty: 1,
-    img: 'https://placehold.co/150x150/f8f9fa/a0aec0?text=iPhone+15',
-    status: 'Sẵn hàng',
-  },
-];
 
 const formatPrice = (price) => new Intl.NumberFormat('vi-VN').format(price) + ' đ';
 
 const Cart = () => {
-  const [cartItems, setCartItems] = useState(initialCart);
+  const cartItems = useSelector(state => state.cart.items);
+  const dispatch = useDispatch();
 
-  // Tính tổng tiền đơn hàng
   const subTotal = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
 
-  // Xử lý tăng giảm số lượng (Tạm thời xử lý state local cho UI)
-  const updateQty = (id, newQty) => {
+  const handleUpdateQty = (id, newQty) => {
     if (newQty < 1) return;
-    const updated = cartItems.map(item => 
-      item.id === id ? { ...item, qty: newQty } : item
-    );
-    setCartItems(updated);
+    dispatch(updateQuantity({ id, qty: newQty }));
   };
 
-  const removeItem = (id) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
+  const handleRemoveItem = (id) => {
+    dispatch(removeFromCart(id));
+    toast.error('Đã xóa sản phẩm khỏi giỏ hàng!');
   };
+
+  if (cartItems.length === 0) {
+    return (
+      <div className={styles.cartContainer} style={{ textAlign: 'center', padding: '60px 0' }}>
+        <Empty 
+          description={<span style={{ fontSize: '18px', color: '#6b7280' }}>Giỏ hàng của bạn đang trống</span>} 
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+        />
+        <Link to="/products">
+          <Button type="primary" size="large" style={{ marginTop: '20px', background: '#0d3b66' }}>
+            Bắt đầu mua sắm ngay
+          </Button>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.cartContainer}>
@@ -55,64 +51,52 @@ const Cart = () => {
       </div>
 
       <Row gutter={40}>
-        {/* ================= CỘT TRÁI: DANH SÁCH SẢN PHẨM ================= */}
         <Col xs={24} lg={16}>
-          {/* Header Cột - Sử dụng class cartGrid đã cấu hình chia tỷ lệ */}
           <div className={`${styles.cartGrid} ${styles.cartHeader}`}>
             <div>Sản phẩm</div>
             <div style={{ textAlign: 'center' }}>Đơn giá</div>
             <div style={{ textAlign: 'center' }}>Số lượng</div>
             <div style={{ textAlign: 'right' }}>Tổng tiền</div>
-            <div></div> {/* Cột trống cho nút xóa */}
+            <div></div> 
           </div>
 
-          {/* Danh sách Item */}
           {cartItems.map((item) => (
             <div key={item.id} className={`${styles.cartGrid} ${styles.cartItem}`}>
-              
-              {/* 1. Sản phẩm */}
               <div className={styles.productInfo}>
                 <img src={item.img} alt={item.name} className={styles.productImg} />
                 <div>
                   <div className={styles.productName}>{item.name}</div>
-                  <div className={styles.stockStatus}>{item.status}</div>
+                  <div className={styles.stockStatus}>Sẵn hàng</div>
                 </div>
               </div>
 
-              {/* 2. Đơn giá */}
               <div className={styles.priceText} style={{ textAlign: 'center' }}>
                 {formatPrice(item.price)}
               </div>
 
-              {/* 3. Số lượng */}
               <div style={{ textAlign: 'center' }}>
                 <div className={styles.qtySelector}>
-                  <button className={styles.qtyBtn} onClick={() => updateQty(item.id, item.qty - 1)}>-</button>
+                  <button className={styles.qtyBtn} onClick={() => handleUpdateQty(item.id, item.qty - 1)}>-</button>
                   <input type="text" value={item.qty} readOnly className={styles.qtyInput} />
-                  <button className={styles.qtyBtn} onClick={() => updateQty(item.id, item.qty + 1)}>+</button>
+                  <button className={styles.qtyBtn} onClick={() => handleUpdateQty(item.id, item.qty + 1)}>+</button>
                 </div>
               </div>
 
-              {/* 4. Tổng tiền */}
               <div className={styles.totalText} style={{ textAlign: 'right' }}>
                 {formatPrice(item.price * item.qty)}
               </div>
 
-              {/* 5. Nút xóa */}
               <div style={{ textAlign: 'right' }}>
-                <FiTrash2 className={styles.deleteBtn} size={20} onClick={() => removeItem(item.id)} />
+                <FiTrash2 className={styles.deleteBtn} size={20} onClick={() => handleRemoveItem(item.id)} />
               </div>
-
             </div>
           ))}
 
-          {/* Nút quay lại */}
           <Link to="/products" className={styles.continueBtn}>
             <FiArrowLeft /> Tiếp tục mua sắm
           </Link>
         </Col>
 
-        {/* ================= CỘT PHẢI: TÓM TẮT ĐƠN HÀNG ================= */}
         <Col xs={24} lg={8}>
           <div className={styles.summaryBox}>
             <div className={styles.summaryTitle}>Tóm tắt đơn hàng</div>
@@ -151,7 +135,6 @@ const Cart = () => {
               Tiến hành thanh toán <FiArrowRight style={{ marginLeft: '8px' }} />
             </Button>
             
-            {/* Hình ảnh các phương thức thanh toán giả lập */}
             <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginTop: '24px' }}>
               <img src="https://placehold.co/40x25/f8f9fa/a0aec0?text=VISA" alt="Visa" />
               <img src="https://placehold.co/40x25/f8f9fa/a0aec0?text=ATM" alt="ATM" />

@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Input, Badge, Menu, Spin } from 'antd';
+import { Input, Badge, Menu, Spin, Dropdown } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
-import { SearchOutlined, HeartOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
+import { SearchOutlined, HeartOutlined, ShoppingCartOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons';
 import logoImg from '../assets/images/techstore_logo.png';
 import styles from './Header.module.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../redux/user/userSlice';
+import { toast } from 'react-toastify';
 
-// Import Custom Hook và API Service
 import useDebounce from '../hooks/useDebounce';
 import productService from '../api/productService';
 
@@ -21,10 +23,33 @@ const Header = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const searchRef = useRef(null);
 
-  // Áp dụng custom hook: Giá trị này chỉ thay đổi khi người dùng NGỪNG GÕ 500ms
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
-  // 1. Logic đóng Dropdown khi click ra ngoài thanh tìm kiếm
+  const cartItems = useSelector(state => state.cart.items);
+  const totalCartQty = cartItems.reduce((total, item) => total + item.qty, 0);
+
+  const dispatch = useDispatch();
+  
+  const { isAuthenticated, currentUser } = useSelector(state => state.user);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    toast.info('Đã đăng xuất khỏi hệ thống');
+  };
+
+  const userMenu = [
+    { key: 'profile', label: 'Thông tin tài khoản' },
+    { key: 'orders', label: 'Đơn hàng của tôi' },
+    { type: 'divider' },
+    { 
+      key: 'logout', 
+      label: 'Đăng xuất', 
+      icon: <LogoutOutlined />, 
+      danger: true,
+      onClick: handleLogout 
+    },
+  ];
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
@@ -35,14 +60,12 @@ const Header = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // 2. Logic gọi API Tìm kiếm khi debouncedSearchTerm thay đổi
   useEffect(() => {
     const fetchSearchResults = async () => {
       if (debouncedSearchTerm.trim()) {
         setIsSearching(true);
         setShowDropdown(true);
         try {
-          // Gọi API tìm kiếm từ DummyJSON
           const res = await productService.searchProducts(debouncedSearchTerm);
           setSearchResults(res.products || []);
         } catch (error) {
@@ -51,7 +74,6 @@ const Header = () => {
           setIsSearching(false);
         }
       } else {
-        // Xóa kết quả nếu ô tìm kiếm rỗng
         setSearchResults([]);
         setShowDropdown(false);
       }
@@ -60,11 +82,10 @@ const Header = () => {
     fetchSearchResults();
   }, [debouncedSearchTerm]);
 
-  // 3. Xử lý khi click vào sản phẩm trong dropdown
   const handleProductClick = (id) => {
-    setSearchTerm(''); // Xóa ô input
-    setShowDropdown(false); // Ẩn dropdown
-    navigate(`/products/${id}`); // Chuyển hướng sang trang chi tiết
+    setSearchTerm(''); 
+    setShowDropdown(false); 
+    navigate(`/products/${id}`); 
   };
 
   const menuItems = [
@@ -85,7 +106,6 @@ const Header = () => {
           <span className={styles.logoText}>TechZone</span>
         </Link>
 
-        {/* Thanh tìm kiếm */}
         <div className={styles.searchContainer} ref={searchRef}>
           <Input
             size="large"
@@ -97,7 +117,6 @@ const Header = () => {
             onFocus={() => { if (searchTerm.trim()) setShowDropdown(true); }}
           />
 
-          {/* Khung hiển thị kết quả (Dropdown) */}
           {showDropdown && (
             <div className={styles.searchResults}>
               {isSearching ? (
@@ -136,17 +155,25 @@ const Header = () => {
             <HeartOutlined />
           </Link>
           <Link to="/cart" className={styles.iconLink}>
-            <Badge count={3} color="#ef4444" size="small" offset={[-2, 4]}>
+            <Badge count={totalCartQty} color="#ef4444" size="small" offset={[-2, 4]}>
               <ShoppingCartOutlined style={{ fontSize: '24px', color: '#003049' }} />
             </Badge>
           </Link>
-          <Link to="/profile" className={styles.iconLink}>
-            <UserOutlined />
-          </Link>
+          {isAuthenticated ? (
+            <Dropdown menu={{ items: userMenu }} placement="bottomRight" arrow>
+              <div style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', color: '#0d3b66', fontWeight: 500 }}>
+                <UserOutlined style={{ fontSize: '20px' }} />
+                <span>Hi, {currentUser?.name}</span>
+              </div>
+            </Dropdown>
+          ) : (
+            <Link to="/login" className={styles.iconLink}>
+              <UserOutlined />
+            </Link>
+          )}
         </div>
       </div>
 
-      {/* Hàng Menu */}
       <div className={styles.bottomRow}>
         <Menu 
           mode="horizontal" 

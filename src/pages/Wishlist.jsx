@@ -1,71 +1,35 @@
-import React, { useState } from 'react';
-import { Breadcrumb, Row, Col, Button, Rate, Typography, Tag, Empty } from 'antd';
+import React from 'react';
+import { Breadcrumb, Row, Col, Button, Rate, Typography, Tag } from 'antd';
 import { Link } from 'react-router-dom';
 import { FiShare2, FiShoppingCart, FiMonitor, FiSmartphone, FiHeadphones, FiCpu } from 'react-icons/fi';
 import { IoCloseOutline, IoHeartOutline } from 'react-icons/io5';
 import styles from './Wishlist.module.css';
+import { toast } from 'react-toastify';
+
+import { useSelector, useDispatch } from 'react-redux';
+import { removeFromWishlist } from '../redux/wishlist/wishlistSlice';
+import { addToCart } from '../redux/cart/cartSlice';
 
 const { Text } = Typography;
-
-// --- MOCK DATA ---
-const initialWishlist = [
-  {
-    id: 1,
-    name: 'Tai nghe AirPods Pro Gen 2',
-    price: 5890000,
-    oldPrice: null,
-    rating: 4.9,
-    reviews: 128,
-    img: 'https://placehold.co/200x200/f8f9fa/a0aec0?text=AirPods',
-    tags: [{ text: 'CÒN HÀNG', color: 'success' }]
-  },
-  {
-    id: 2,
-    name: 'MacBook Air M3 (8GB/256GB)',
-    price: 29690000,
-    oldPrice: 32990000,
-    rating: 5.0,
-    reviews: 45,
-    img: 'https://placehold.co/200x200/f8f9fa/a0aec0?text=MacBook+Air',
-    tags: [{ text: 'MỚI', color: 'processing' }, { text: '-10%', color: 'error' }]
-  },
-  {
-    id: 3,
-    name: 'Sony Alpha A7 IV Body',
-    price: 56490000,
-    oldPrice: null,
-    rating: 4.8,
-    reviews: 21,
-    img: 'https://placehold.co/200x200/f8f9fa/a0aec0?text=Sony+A7',
-    tags: []
-  },
-  {
-    id: 4,
-    name: 'Bàn phím cơ Logitech G915 TKL',
-    price: 4250000,
-    oldPrice: null,
-    rating: 4.7,
-    reviews: 89,
-    img: 'https://placehold.co/200x200/f8f9fa/a0aec0?text=Logitech',
-    tags: []
-  }
-];
 
 const formatPrice = (price) => new Intl.NumberFormat('vi-VN').format(price) + ' đ';
 
 const Wishlist = () => {
-  const [wishlistItems, setWishlistItems] = useState(initialWishlist);
-  // Thay đổi biến này thành true để xem màn hình lúc chưa có sản phẩm nào
-  const [isEmpty, setIsEmpty] = useState(false); 
+  const wishlistItems = useSelector(state => state.wishlist.items);
+  const dispatch = useDispatch();
 
   const handleRemove = (id) => {
-    const newItems = wishlistItems.filter(item => item.id !== id);
-    setWishlistItems(newItems);
-    if (newItems.length === 0) setIsEmpty(true);
+    dispatch(removeFromWishlist(id));
+    toast.error('Đã xóa khỏi danh sách yêu thích!');
   };
 
-  // Nếu danh sách trống
-  if (isEmpty) {
+  const handleMoveToCart = (item) => {
+    dispatch(addToCart({ ...item, qty: 1 }));
+    dispatch(removeFromWishlist(item.id));
+    toast.success('Đã chuyển sản phẩm vào Giỏ hàng');
+  };
+
+  if (wishlistItems.length === 0) {
     return (
       <div className={styles.wishlistContainer}>
         <div className={styles.emptyStateWrapper}>
@@ -78,7 +42,6 @@ const Wishlist = () => {
             </Button>
           </Link>
 
-          {/* Các nút danh mục nhỏ bên dưới Empty State */}
           <div style={{ marginTop: '60px', display: 'flex', gap: '20px' }}>
              <Button icon={<FiMonitor />} style={{ width: '120px', height: '80px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>Laptop</Button>
              <Button icon={<FiSmartphone />} style={{ width: '120px', height: '80px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>Điện thoại</Button>
@@ -90,7 +53,6 @@ const Wishlist = () => {
     );
   }
 
-  // Nếu có sản phẩm
   return (
     <div className={styles.wishlistContainer}>
       <Breadcrumb className={styles.breadcrumb}
@@ -119,7 +81,7 @@ const Wishlist = () => {
               <div className={styles.imageWrapper}>
                 <img src={item.img} alt={item.name} className={styles.productImage} />
                 <div className={styles.tagsWrapper}>
-                  {item.tags.map((tag, index) => (
+                  {item.tags && item.tags.map((tag, index) => (
                     <Tag color={tag.color} key={index} style={{ margin: 0, fontWeight: 600 }}>{tag.text}</Tag>
                   ))}
                 </div>
@@ -139,7 +101,12 @@ const Wishlist = () => {
                   <div className={styles.currentPrice}>{formatPrice(item.price)}</div>
                 </div>
 
-                <Button type="primary" icon={<FiShoppingCart />} className={styles.moveToCartBtn}>
+                <Button 
+                  type="primary" 
+                  icon={<FiShoppingCart />} 
+                  className={styles.moveToCartBtn}
+                  onClick={() => handleMoveToCart(item)}
+                >
                   Chuyển vào giỏ
                 </Button>
               </div>
