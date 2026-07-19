@@ -38,7 +38,7 @@ const Header = () => {
   };
 
   const userMenu = [
-    { key: 'profile', label: 'Thông tin tài khoản' },
+    { key: 'profile', label: <Link to="/profile">Thông tin tài khoản</Link> },
     { key: 'orders', label: 'Đơn hàng của tôi' },
     { type: 'divider' },
     { 

@@ -1,0 +1,133 @@
+/* src/pages/Login.module.css */
+
+.loginWrapper {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; 
+}
+
+.loginCard {
+  width: 100%;
+  max-width: 440px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  padding: 40px 30px;
+  text-align: center;
+}
+
+.logoSection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.logoIcon {
+  font-size: 28px;
+  color: #0d3b66;
+}
+
+.logoText {
+  font-size: 26px;
+  font-weight: bold;
+  color: #0d3b66;
+  margin: 0;
+}
+
+.welcomeTitle {
+  font-size: 20px;
+  font-weight: bold;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.welcomeSubtitle {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 32px;
+}
+
+.formLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: #4b5563;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: block;
+  text-align: left;
+}
+
+.optionsRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  font-size: 14px;
+}
+
+.forgotPwd {
+  color: #0d3b66;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.loginBtn {
+  background-color: #0d3b66 !important;
+  height: 48px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+.loginBtn:hover {
+  background-color: #082846 !important;
+}
+
+.divider {
+  border-top: 1px solid #e5e7eb;
+  margin: 24px 0;
+}
+
+.registerText {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.registerLink {
+  color: #02c39a; 
+  font-weight: 600;
+  text-decoration: none;
+  margin-left: 4px;
+}
+
+.footer {
+  margin-top: 32px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+}
+
+.footerLinks {
+  margin-top: 8px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.footerLinks span {
+  cursor: pointer;
+}
+
+.footerLinks span:hover {
+  color: #fff;
+}
