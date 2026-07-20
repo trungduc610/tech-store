@@ -13,6 +13,7 @@ import Wishlist from './pages/Wishlist';
 import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import Profile from './pages/Profile';
+import NotFound from './pages/NotFound';
 
 const App = () => {
   return (
@@ -46,6 +47,7 @@ const App = () => {
               </ProtectedRoute>
             } 
           />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <Footer />
