@@ -20,7 +20,6 @@ const Profile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
-  // 1. STATE QUẢN LÝ TAB ĐANG HIỂN THỊ
   const [activeTab, setActiveTab] = useState('info');
 
   const currentUser = useSelector(state => state.user.currentUser);
@@ -31,7 +30,6 @@ const Profile = () => {
     navigate('/login');
   };
 
-  // Cấu hình menu cột trái
   const menuItems = [
     { key: 'info', icon: <UserOutlined />, label: 'Thông tin cá nhân' },
     { key: 'orders', icon: <ShoppingOutlined />, label: 'Lịch sử đơn hàng' },
@@ -40,16 +38,14 @@ const Profile = () => {
     { key: 'logout', icon: <LogoutOutlined style={{ color: '#ef4444' }} />, label: <span style={{ color: '#ef4444' }}>Đăng xuất</span> },
   ];
 
-  // 2. HÀM XỬ LÝ KHI CLICK VÀO MENU
   const handleMenuClick = (e) => {
     if (e.key === 'logout') {
       handleLogout();
     } else {
-      setActiveTab(e.key); // Chuyển tab tương ứng
+      setActiveTab(e.key); 
     }
   };
 
-  // Dữ liệu giả lập cho bảng Đơn hàng
   const orderColumns = [
     { title: 'Mã đơn hàng', dataIndex: 'id', key: 'id', render: text => <strong>{text}</strong> },
     { title: 'Ngày mua', dataIndex: 'date', key: 'date' },
@@ -71,9 +67,7 @@ const Profile = () => {
     { key: '3', id: '#TZ12340', date: '25/04/2026', status: 'Đã giao hàng', total: '15.990.000 đ' },
   ];
 
-  // ================= CÁC COMPONENT NỘI BỘ =================
   
-  // Tab 1: Thông tin cá nhân
   const renderPersonalInfo = () => (
     <>
       <Card style={{ marginBottom: '24px', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
@@ -140,7 +134,6 @@ const Profile = () => {
     </>
   );
 
-  // Tab 2: Lịch sử đơn hàng
   const renderOrders = () => (
     <Card 
       title={<span style={{ color: '#0d3b66', fontSize: '18px' }}>Lịch sử đơn hàng</span>} 
@@ -155,7 +148,6 @@ const Profile = () => {
     </Card>
   );
 
-  // Tab 3: Cài đặt (Tạm thời để trống)
   const renderSettings = () => (
     <Card style={{ borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', minHeight: '400px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <Empty description="Tính năng cài đặt đang được phát triển" />
@@ -166,20 +158,18 @@ const Profile = () => {
     <div style={{ maxWidth: '1200px', margin: '0 auto', paddingTop: '20px' }}>
       <Row gutter={24}>
         
-        {/* ================= CỘT TRÁI: MENU ================= */}
         <Col xs={24} md={6}>
           <Card bodyStyle={{ padding: '12px 0' }} style={{ borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
             <Menu 
               mode="inline" 
-              selectedKeys={[activeTab]} // Ràng buộc UI theo state activeTab
-              onClick={handleMenuClick}  // Lắng nghe sự kiện click
+              selectedKeys={[activeTab]} 
+              onClick={handleMenuClick}  
               items={menuItems} 
               style={{ borderRight: 'none' }}
             />
           </Card>
         </Col>
 
-        {/* ================= CỘT PHẢI: RENDERING ĐỘNG ================= */}
         <Col xs={24} md={18}>
           {activeTab === 'info' && renderPersonalInfo()}
           {activeTab === 'orders' && renderOrders()}

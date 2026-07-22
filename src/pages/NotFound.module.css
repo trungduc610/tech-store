@@ -95,3 +95,34 @@
 .linkItem:hover {
   color: #0d3b66;
 }
+
+@media (max-width: 576px) {
+  .notFoundContainer {
+    padding: 30px 16px;
+  }
+
+  .imageWrapper {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 20px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .description {
+    font-size: 14px;
+    margin-bottom: 24px;
+    padding: 0 10px; 
+  }
+
+  .footerSection {
+    margin-top: 40px; 
+  }
+
+  .linksWrapper {
+    flex-direction: column;
+    gap: 16px; 
+  }
+}

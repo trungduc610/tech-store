@@ -3,7 +3,6 @@
   padding: 20px 0;
 }
 
-/* Sidebar Box */
 .sidebar {
   background: #fff;
   border: 1px solid #e5e7eb;
@@ -38,7 +37,6 @@
   gap: 8px;
 }
 
-/* Top Bar (Count & Sort) */
 .topBar {
   background: #fff;
   border: 1px solid #e5e7eb;
@@ -50,7 +48,6 @@
   margin-bottom: 24px;
 }
 
-/* Product Card */
 .productCard {
   border-radius: 8px;
   border: 1px solid #e5e7eb;
@@ -94,9 +91,51 @@
   color: #fff !important;
 }
 
-/* Pagination container */
 .paginationWrapper {
   display: flex;
   justify-content: center;
   margin-top: 40px;
+}
+
+@media (max-width: 768px) {
+  .listContainer {
+    padding: 10px 0;
+  }
+
+  .sidebar {
+    padding: 16px; 
+    margin-bottom: 16px; 
+  }
+
+  .filterHeader {
+    margin-bottom: 16px;
+    font-size: 16px;
+  }
+
+  .topBar {
+    flex-direction: column; 
+    align-items: stretch; 
+    gap: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .priceText {
+    font-size: 16px; 
+    margin: 4px 0 8px 0;
+  }
+
+  .ratingContainer {
+    flex-wrap: wrap; 
+  }
+
+  .addToCartBtn {
+    height: 40px; 
+  }
+
+  .paginationWrapper {
+    margin-top: 24px;
+    margin-bottom: 24px;
+  }
 }

@@ -131,3 +131,32 @@
 .footerLinks span:hover {
   color: #fff;
 }
+
+@media (max-width: 576px) {
+  .loginCard {
+    margin: 0 16px; 
+    padding: 32px 20px; 
+  }
+
+  .logoText {
+    font-size: 24px; 
+  }
+
+  .welcomeTitle {
+    font-size: 18px;
+  }
+
+  .optionsRow {
+    font-size: 13px; 
+  }
+
+  .footer {
+    margin-top: 24px; 
+    padding-bottom: 24px;
+  }
+
+  .footerLinks {
+    flex-wrap: wrap; 
+    gap: 12px;
+  }
+}

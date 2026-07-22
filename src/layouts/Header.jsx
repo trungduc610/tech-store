@@ -93,7 +93,7 @@ const Header = () => {
     { key: 'laptop', label: <Link to="/products?category=laptop">Laptop</Link> },
     { key: 'phone', label: <Link to="/products?category=phone">Điện thoại</Link> },
     { key: 'accessories', label: <Link to="/products?category=accessories">Phụ kiện</Link> },
-    { key: 'components', label: <Link to="/products?category=components">Linh kiện</Link> },
+    { key: 'components', label: <Link to="/products?category=tablets">Máy tính bảng</Link> },
   ];
 
   return (
