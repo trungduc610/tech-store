@@ -3,9 +3,9 @@ import { useState, useEffect } from 'react';
 
 /**
  * Custom hook useDebounce
- * @param {any} value - Giá trị cần theo dõi (ví dụ: từ khóa tìm kiếm)
- * @param {number} delay - Thời gian chờ (mili-giây)
- * @returns Giá trị đã được delay
+ * @param {any} value 
+ * @param {number} delay 
+ * @returns 
  */
 const useDebounce = (value, delay) => {
   const [debouncedValue, setDebouncedValue] = useState(value);

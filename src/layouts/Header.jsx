@@ -16,7 +16,6 @@ const formatPrice = (price) => new Intl.NumberFormat('vi-VN').format(price) + ' 
 const Header = () => {
   const navigate = useNavigate();
   
-  // State quản lý tìm kiếm
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -67,7 +66,16 @@ const Header = () => {
         setShowDropdown(true);
         try {
           const res = await productService.searchProducts(debouncedSearchTerm);
-          setSearchResults(res.products || []);
+          
+          
+          const techCategories = ['smartphones', 'laptops', 'tablets', 'mobile-accessories']; 
+          
+          const filteredProducts = (res.products || []).filter(product => 
+            techCategories.includes(product.category)
+          );
+          
+          setSearchResults(filteredProducts);
+
         } catch (error) {
           console.error("Lỗi khi tìm kiếm:", error);
         } finally {
@@ -100,7 +108,6 @@ const Header = () => {
     <header className={styles.headerWrapper}>
       <div className={styles.topRow}>
         
-        {/* Logo */}
         <Link to="/" className={styles.logoSection}>
           <img src={logoImg} alt="TechZone Logo" className={styles.logoImg} />
           <span className={styles.logoText}>TechZone</span>
@@ -149,7 +156,6 @@ const Header = () => {
           )}
         </div>
 
-        {/* Icons */}
         <div className={styles.iconSection}>
           <Link to="/wishlist" className={styles.iconLink}>
             <HeartOutlined />
