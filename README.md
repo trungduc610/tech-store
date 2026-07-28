@@ -1,14 +1,11 @@
-TechZone - Website Bán Đồ Công Nghệ 
-Tech Stack & Thư Viện
-Dự án được xây dựng dựa trên bộ công nghệ Front-end tiêu chuẩn:
-• Core Framework & Build Tool: ReactJS + Vite
-• Routing: React Router DOM v6
-• State Management: Redux Toolkit
-• UI Component Library: Ant Design (Antd)
-• Styling: CSS Modules
-• HTTP Client: Axios
-• Data Source: API công khai DummyJSON
-Cấu Trúc Thư Mục Dự Án
+# 🚀 TechZone - Website Bán Đồ Công Nghệ
+
+
+**TechZone** là ứng dụng web thương mại điện tử chuyên cung cấp các sản phẩm công nghệ (Điện thoại, Laptop, Máy tính bảng, Phụ kiện...). Dự án tập trung tối ưu trải nghiệm người dùng (UI/UX), tốc độ tải trang, khả năng phản hồi (Responsive) và áp dụng cấu trúc mã nguồn sạch, hiện đại.
+
+## 📂 Cấu Trúc Thư Mục Dự Án
+
+```text
 src/
 ├── api/          # Cấu hình Axios Client & hàm gọi API tập trung
 ├── assets/       # Tài nguyên tĩnh
@@ -23,6 +20,7 @@ src/
 ├── utils/        # Các hàm tiện ích bổ trợ
 ├── App.jsx       # Component cốt lõi
 └── main.jsx      # Vite Entry-point
+
 Tính Năng Chính
 1. Trang chủ (Home): Hero Banner, Danh mục, Sản phẩm nổi bật.
 2. Tìm kiếm & Bộ lọc nâng cao: Tìm kiếm thông minh tích hợp Debounce (500ms).
