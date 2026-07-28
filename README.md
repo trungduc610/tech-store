@@ -1,16 +1,66 @@
-# React + Vite
+Tính Năng Chính
+1 Trang chủ (Home):
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+    Hero Banner slider tự động.
 
-Currently, two official plugins are available:
+    Danh mục sản phẩm nổi bật & Chính sách bán hàng.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+    Hiển thị danh sách sản phẩm công nghệ bán chạy fetch từ API.
 
-## React Compiler
+2 Tìm kiếm & Bộ lọc (Search & Filter):
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+    Thanh tìm kiếm thông minh tích hợp Debounce (500ms) và dropdown gợi ý sản phẩm công nghệ theo thời gian thực.
 
-## Expanding the Oxlint configuration
+    Đổ lọc danh mục (Smartphones, Laptops, Tablets, Accessories).
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+3 Chi tiết sản phẩm (Product Detail):
+
+    Xem hình ảnh chất lượng cao, giá tiền (đổi sang VNĐ), thông số kĩ thuật và đánh giá.
+
+4 Giỏ hàng (Cart) & Redux:
+
+    Thêm/Xóa/Sửa số lượng sản phẩm trực tiếp.
+
+    Tự động tính tổng tiền và đồng bộ trạng thái giỏ hàng.
+
+5 Xác thực người dùng (Auth Simulation):
+
+    Đăng nhập giả lập để bảo vệ các route riêng tư như Trang cá nhân (/profile).
+
+Cấu trúc thư mục
+src/
+├── api/          # Cấu hình Axios Client & hàm gọi API tập trung (productService...)
+├── assets/       # Tài nguyên tĩnh (Hình ảnh banner, logo, icons...)
+├── components/   # UI Component tái sử dụng (Header, Footer, ProductCard, PageWrapper...)
+├── constants/    # Hằng số toàn cục (API_URL, APP_ROUTES...)
+├── hooks/        # Custom Hooks tự định nghĩa (useDebounce...)
+├── layouts/      # Khung Layout của trang (MainLayout, AuthLayout...)
+├── pages/        # Các màn hình chính (Home, ProductList, ProductDetail, Cart, Profile, NotFound...)
+├── redux/        # Quản lý Global State với Redux Toolkit (cartSlice, userSlice, store.js)
+├── routes/       # Cấu hình Routing và Bảo vệ Route (ProtectedRoute)
+├── styles/       # Cấu hình CSS dùng chung, biến màu sắc toàn cục
+├── utils/        # Các hàm tiện ích bổ trợ (Format tiền tệ, xử lý chuỗi)
+├── App.jsx       # Component cốt lõi gắn kết Routes và Providers
+└── main.jsx      # Vite Entry-point
+
+Hướng Dẫn Cài Đặt & Chạy Cục Bộ (Local Setup)
+Yêu cầu hệ thống:
+Node.js: Phiên bản 18.x trở lên
+
+npm hoặc yarn
+
+Các bước thực hiện:
+1 Clone repository về máy:
+
+Bash
+git clone [https://github.com/trungduc610/tech-store.git]
+
+2 Cài đặt các thư viện phụ thuộc (Dependencies):
+
+Bash
+npm install
+3 Khởi chạy ứng dụng ở môi trường Development:
+
+Bash
+npm run dev
+Trình duyệt sẽ mở tại địa chỉ: http://localhost:5173/
